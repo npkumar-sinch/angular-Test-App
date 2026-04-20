@@ -1,0 +1,165 @@
+<div class="auth-container">
+  <!-- Left Sidebar -->
+  <div class="auth-sidebar">
+    <div class="sidebar-content">
+      <h1 class="sidebar-title">Static login, signup, and dashboard flows for quick testing.</h1>
+      <p class="sidebar-description">This app now uses a backend login API for authentication. Login requests go to /api/login while the demo signup flow still creates local test users.</p>
+      
+      <div class="demo-credentials">
+        <div class="credentials-label">DEMO LOGIN</div>
+        <div class="credentials-box">
+          <div class="credential-item">
+            <span class="credential-key">EMAIL</span>
+            <span class="credential-value">{{ demoEmail }}</span>
+          </div>
+          <div class="credential-item">
+            <span class="credential-key">PASSWORD</span>
+            <span class="credential-value">{{ demoPassword }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="features-list">
+        <div class="feature-tag">Local test users</div>
+        <div class="feature-tag">Responsive layout</div>
+        <div class="feature-tag">Dashboard cards</div>
+        <div class="feature-tag">Backend login enabled</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Content -->
+  <div class="auth-content">
+    <div class="auth-card">
+      <h2 class="auth-title">Sign in to continue</h2>
+      <p class="auth-subtitle">Use the demo account or create your own local test user.</p>
+
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button 
+          class="tab-button"
+          [class.active]="isLoginTab"
+          (click)="switchTab(true)"
+        >
+          Login
+        </button>
+        <button 
+          class="tab-button"
+          [class.active]="!isLoginTab"
+          (click)="switchTab(false)"
+        >
+          Signup
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <form *ngIf="isLoginTab" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="auth-form">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input
+            type="email"
+            id="login-email"
+            formControlName="email"
+            class="form-control"
+            [class.is-invalid]="submitted && loginFormControls['email'].errors"
+            placeholder="demo@example.com"
+          />
+          <div *ngIf="submitted && loginFormControls['email'].errors" class="error-message">
+            <div *ngIf="loginFormControls['email'].errors['required']">Email is required</div>
+            <div *ngIf="loginFormControls['email'].errors['email']">Please enter a valid email</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input
+            type="password"
+            id="login-password"
+            formControlName="password"
+            class="form-control"
+            [class.is-invalid]="submitted && loginFormControls['password'].errors"
+            placeholder="••••••••••"
+          />
+          <div *ngIf="submitted && loginFormControls['password'].errors" class="error-message">
+            <div *ngIf="loginFormControls['password'].errors['required']">Password is required</div>
+            <div *ngIf="loginFormControls['password'].errors['minlength']">Password must be at least 6 characters</div>
+          </div>
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger">
+          {{ error }}
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading">
+          {{ loading ? 'Loading...' : 'Login' }}
+        </button>
+      </form>
+
+      <!-- Signup Form -->
+      <form *ngIf="!isLoginTab" [formGroup]="signupForm" (ngSubmit)="onSignupSubmit()" class="auth-form">
+        <div class="form-group">
+          <label for="signup-email">Email</label>
+          <input
+            type="email"
+            id="signup-email"
+            formControlName="email"
+            class="form-control"
+            [class.is-invalid]="submitted && signupFormControls['email'].errors"
+            placeholder="Enter your email"
+          />
+          <div *ngIf="submitted && signupFormControls['email'].errors" class="error-message">
+            <div *ngIf="signupFormControls['email'].errors['required']">Email is required</div>
+            <div *ngIf="signupFormControls['email'].errors['email']">Please enter a valid email</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <input
+            type="password"
+            id="signup-password"
+            formControlName="password"
+            class="form-control"
+            [class.is-invalid]="submitted && signupFormControls['password'].errors"
+            placeholder="••••••••••"
+          />
+          <div *ngIf="submitted && signupFormControls['password'].errors" class="error-message">
+            <div *ngIf="signupFormControls['password'].errors['required']">Password is required</div>
+            <div *ngIf="signupFormControls['password'].errors['minlength']">Password must be at least 6 characters</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-confirm">Confirm Password</label>
+          <input
+            type="password"
+            id="signup-confirm"
+            formControlName="confirmPassword"
+            class="form-control"
+            [class.is-invalid]="submitted && (signupFormControls['confirmPassword'].errors || signupForm.errors?.['passwordMismatch'])"
+            placeholder="••••••••••"
+          />
+          <div *ngIf="submitted && (signupFormControls['confirmPassword'].errors || signupForm.errors?.['passwordMismatch'])" class="error-message">
+            <div *ngIf="signupFormControls['confirmPassword'].errors?.['required']">Please confirm your password</div>
+            <div *ngIf="signupForm.errors?.['passwordMismatch']">Passwords do not match</div>
+          </div>
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger">
+          {{ error }}
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading">
+          {{ loading ? 'Creating...' : 'Create Account' }}
+        </button>
+      </form>
+
+      <!-- Demo Account Button -->
+      <div class="demo-section" *ngIf="isLoginTab">
+        <button type="button" class="btn btn-demo" (click)="useDemoAccount()">
+          Use demo user
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
