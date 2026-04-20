@@ -24,9 +24,6 @@ jobs:
       - name: Build project
         run: npm run build -- --configuration=production
 
-      - name: Install AWS CLI
-        run: sudo apt-get update && sudo apt-get install -y awscli
-
       - name: Deploy to S3
         run: aws s3 sync ./dist/angular-app s3://${{ secrets.S3_BUCKET }} --delete
         env:
